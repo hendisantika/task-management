@@ -1,6 +1,7 @@
 package id.my.hendisantika.taskmanagement.handlers
 
 import id.my.hendisantika.taskmanagement.dtos.TaskQueryParamValues
+import id.my.hendisantika.taskmanagement.dtos.TaskRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -50,6 +51,25 @@ class TaskHandler(
         return service.byId(id)
             .flatMap { ServerResponse.ok().bodyValue(it.toTaskResponse()) }
             .switchIfEmpty { taskRespNotFound(id) }.awaitSingle()
+    }
+
+    suspend fun create(request: ServerRequest): ServerResponse {
+        return request.bodyToMono<TaskRequest>()
+            .flatMap(::doCreate).awaitSingle()
+        // .flatMap { body ->
+        //   val violations = validator.validate(body)
+        //
+        //   if (violations.isEmpty()) {
+        //     userService.byId(body.userId).map(User::toUserResponse).flatMap { _ ->
+        //       val taskToCreate = Task.fromTaskRequest(body)
+        //       val createdTask = service.create(taskToCreate)
+        //       ServerResponse.status(HttpStatus.CREATED).body(createdTask.map(Task::toTaskResponse))
+        //     }.switchIfEmpty(userIdDoesNotExists(body.userId))
+        //   } else {
+        //     val badRequestResp = BadRequestResponse(entryMapErrors(violations))
+        //     ServerResponse.badRequest().bodyValue(badRequestResp)
+        //   }
+        // }.awaitSingle()
     }
 
 }
