@@ -34,4 +34,6 @@ class UserService(private val repository: UserRepository) : BaseService<User, Lo
             repository.save(userToUpdate)
         }
     }
+
+    override fun deleteById(id: Long): Mono<Void> = repository.deleteById(id)
 }
