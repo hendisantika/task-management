@@ -133,4 +133,6 @@ class TaskHandler(
             noContentResponse
         }.awaitSingle()
     }
+
+    private fun bodyToTask(body: TaskRequest) = Task.fromTaskRequest(body)
 }
