@@ -4,10 +4,12 @@ import id.my.hendisantika.taskmanagement.dtos.TaskQueryParamValues
 import id.my.hendisantika.taskmanagement.dtos.TaskRequest
 import id.my.hendisantika.taskmanagement.dtos.TaskStatusRequest
 import id.my.hendisantika.taskmanagement.entities.Task
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyAndAwait
+import reactor.core.publisher.Mono
 
 /**
  * Created by IntelliJ IDEA.
@@ -137,4 +139,14 @@ class TaskHandler(
 
     private fun bodyToTask(body: TaskRequest) = Task.fromTaskRequest(body)
     private fun createTaskAndMapResp(task: Task) = service.create(task).map(Task::toTaskResponse)
+    private fun doCreate(body: TaskRequest): Mono<ServerResponse> {
+        val violations = validator.validate(body)
+        return if (violations.isEmpty()) {
+            val createTaskResponse = ::bodyToTask then ::createTaskAndMapResp
+            ServerResponse.status(HttpStatus.CREATED).body(createTaskResponse(body))
+        } else {
+            val badRequestResp = BadRequestResponse(entryMapErrors(violations))
+            ServerResponse.badRequest().bodyValue(badRequestResp)
+        }
+    }
 }
