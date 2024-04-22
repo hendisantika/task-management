@@ -4,6 +4,7 @@ import id.my.hendisantika.taskmanagement.entities.Task
 import id.my.hendisantika.taskmanagement.repositories.TaskRepository
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,4 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class TaskService(private val repository: TaskRepository) : BaseService<Task, Long> {
     private val log = LogManager.getLogger(TaskService::class)
+
+    override fun all(): Flux<Task> = repository.findAll()
+    /*.delayElements(Duration.ofMillis(300))*/
 }
