@@ -19,3 +19,6 @@ data class BadRequestResponse<T : Any>(override val errors: Map<String, T>) :
 
 data class UnAuthorizedResponse<T : Any>(override val errors: Map<String, T>) :
     ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errors)
+
+data class NotFoundResponse<T : Any>(override val errors: Map<String, T>) :
+    ErrorResponse(HttpStatus.NOT_FOUND.value(), errors)
