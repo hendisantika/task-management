@@ -2,6 +2,7 @@ package id.my.hendisantika.taskmanagement.entities
 
 import id.my.hendisantika.taskmanagement.dtos.CreateUserRequest
 import id.my.hendisantika.taskmanagement.dtos.UpdateUserRequest
+import id.my.hendisantika.taskmanagement.dtos.UserPasswordRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -55,4 +56,7 @@ data class User(
             lastName = body.lastName,
         )
 
+        fun fromChangePasswordRequest(body: UserPasswordRequest): User = User(
+            password = body.password
+        )
     }
