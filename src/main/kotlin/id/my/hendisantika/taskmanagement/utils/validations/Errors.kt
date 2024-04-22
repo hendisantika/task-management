@@ -25,3 +25,5 @@ private val keyValEachViolation: (ConstraintViolation<*>) -> String = { violatio
 }
 
 private val getViolationProperty: (ConstraintViolation<*>) -> String = { it.propertyPath.toString() }
+
+private val getViolationMessage: (ConstraintViolation<*>) -> String = { it.message }
