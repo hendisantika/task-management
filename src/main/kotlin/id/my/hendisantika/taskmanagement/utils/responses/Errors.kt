@@ -1,5 +1,7 @@
 package id.my.hendisantika.taskmanagement.utils.responses
 
+import org.springframework.http.HttpStatus
+
 /**
  * Created by IntelliJ IDEA.
  * Project : task-management
@@ -11,3 +13,6 @@ package id.my.hendisantika.taskmanagement.utils.responses
  * To change this template use File | Settings | File Templates.
  */
 open class ErrorResponse(val statusCode: Int, open val errors: Map<String, *>)
+
+data class BadRequestResponse<T : Any>(override val errors: Map<String, T>) :
+    ErrorResponse(HttpStatus.BAD_REQUEST.value(), errors)
