@@ -1,5 +1,6 @@
 package id.my.hendisantika.taskmanagement.entities
 
+import id.my.hendisantika.taskmanagement.dtos.TaskRequest
 import org.springframework.data.annotation.*
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
@@ -42,4 +43,26 @@ data class Task(
     /** Start with version 0 when created */
     @Version
     override val version: Int? = null,
-) : BaseEntity(id)
+) : BaseEntity(id) {
+    companion object {
+        fun fromTaskRequest(body: TaskRequest): Task =
+            Task(
+                title = body.title,
+                description = body.description,
+                dueDate = body.dueDate,
+                status = body.status,
+                createdBy = body.userId,
+                updatedBy = body.userId,
+            )
+
+        fun fromUpdateTaskRequest(body: TaskRequest): Task =
+            Task(
+                title = body.title,
+                description = body.description,
+                dueDate = body.dueDate,
+                status = body.status,
+                updatedBy = body.userId,
+            )
+
+    }
+}
