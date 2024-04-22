@@ -23,3 +23,5 @@ fun <T : Any> entryMapErrors(violations: Set<ConstraintViolation<T>>): Map<Strin
 private val keyValEachViolation: (ConstraintViolation<*>) -> String = { violation ->
     "\"${violation.propertyPath}\": \"${violation.message}\""
 }
+
+private val getViolationProperty: (ConstraintViolation<*>) -> String = { it.propertyPath.toString() }
