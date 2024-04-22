@@ -1,7 +1,9 @@
 package id.my.hendisantika.taskmanagement.entities
 
+import id.my.hendisantika.taskmanagement.dtos.CreateTaskResponse
 import id.my.hendisantika.taskmanagement.dtos.TaskRequest
 import id.my.hendisantika.taskmanagement.dtos.TaskResponse
+import id.my.hendisantika.taskmanagement.dtos.UserResponse
 import org.springframework.data.annotation.*
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
@@ -78,4 +80,7 @@ data class Task(
         createdAt = createdAt!!,
         updatedAt = updatedAt!!,
     )
+
+    fun toCreateTaskResponse(user: UserResponse): CreateTaskResponse = toUpdateTaskResponse(user, user)
+
 }
