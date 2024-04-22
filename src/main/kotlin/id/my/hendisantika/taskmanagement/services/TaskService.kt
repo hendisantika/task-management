@@ -71,4 +71,5 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
     }
 
     private fun firstItemLong(): List<Long> = listOf(-1)
+    private val defaultFirstLong = defaultFirstItem(::firstItemLong)
 }
