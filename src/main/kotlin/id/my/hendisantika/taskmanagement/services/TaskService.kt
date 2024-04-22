@@ -30,4 +30,7 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
         return repository.save(task)
     }
 
+    override fun update(id: Long) = { task: Task ->
+        repository.save(task)
+    }
 }
