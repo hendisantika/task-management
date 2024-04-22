@@ -16,3 +16,6 @@ open class ErrorResponse(val statusCode: Int, open val errors: Map<String, *>)
 
 data class BadRequestResponse<T : Any>(override val errors: Map<String, T>) :
     ErrorResponse(HttpStatus.BAD_REQUEST.value(), errors)
+
+data class UnAuthorizedResponse<T : Any>(override val errors: Map<String, T>) :
+    ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errors)
