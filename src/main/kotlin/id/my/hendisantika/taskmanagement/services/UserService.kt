@@ -27,4 +27,11 @@ class UserService(private val repository: UserRepository) : BaseService<User, Lo
 
     override fun create(user: User): Mono<User> = repository.save(user)
 
+    override fun update(id: Long): (User) -> Mono<User> = { user ->
+        byId(id).flatMap { existingUser ->
+            val userToUpdate = copy(existingUser)(user)
+
+            repository.save(userToUpdate)
+        }
+    }
 }
