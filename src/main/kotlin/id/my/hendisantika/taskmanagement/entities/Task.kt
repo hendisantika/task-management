@@ -83,4 +83,16 @@ data class Task(
 
     fun toCreateTaskResponse(user: UserResponse): CreateTaskResponse = toUpdateTaskResponse(user, user)
 
+    fun toUpdateTaskResponse(owner: UserResponse, updater: UserResponse): CreateTaskResponse {
+        val getFullName: (UserResponse) -> String = { listOf(it.firstName, it.lastName).joinToString(" ") }
+        return CreateTaskResponse(
+            id = id!!,
+            title = title,
+            description = description!!,
+            dueDate = dueDate,
+            status = status,
+            createdBy = getFullName(owner),
+            updatedBy = getFullName(updater),
+        )
+    }
 }
