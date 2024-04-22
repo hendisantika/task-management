@@ -3,6 +3,7 @@ package id.my.hendisantika.taskmanagement.entities
 import id.my.hendisantika.taskmanagement.dtos.CreateUserRequest
 import id.my.hendisantika.taskmanagement.dtos.UpdateUserRequest
 import id.my.hendisantika.taskmanagement.dtos.UserPasswordRequest
+import id.my.hendisantika.taskmanagement.dtos.UserResponse
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -60,3 +61,13 @@ data class User(
             password = body.password
         )
     }
+
+    fun toUserResponse(): UserResponse = UserResponse(
+        id = id!!,
+        email = email.orEmpty(),
+        firstName = firstName.orEmpty(),
+        lastName = lastName.orEmpty(),
+        createdAt = createdAt!!,
+        updatedAt = updatedAt!!,
+    )
+}
