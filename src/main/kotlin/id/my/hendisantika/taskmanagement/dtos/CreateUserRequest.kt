@@ -44,3 +44,9 @@ data class UpdateUserRequest(
     @field:Size(min = 2, message = "lastName must be [2] characters or more")
     val lastName: String,
 )
+
+data class UserPasswordRequest(
+    @field:NotBlank(message = "password must not be empty")
+    @field:Size(min = 6, message = "password must be [6] characters or more")
+    val password: String,
+)
