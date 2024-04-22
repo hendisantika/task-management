@@ -44,4 +44,12 @@ class TaskHandler(
         return ServerResponse.ok().bodyAndAwait(fetchedTasks.map(Task::toTaskResponse).asFlow())
     }
 
+    suspend fun byId(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+
+        return service.byId(id)
+            .flatMap { ServerResponse.ok().bodyValue(it.toTaskResponse()) }
+            .switchIfEmpty { taskRespNotFound(id) }.awaitSingle()
+    }
+
 }
