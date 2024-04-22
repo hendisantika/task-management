@@ -2,6 +2,7 @@ package id.my.hendisantika.taskmanagement.handlers
 
 import id.my.hendisantika.taskmanagement.dtos.TaskQueryParamValues
 import id.my.hendisantika.taskmanagement.dtos.TaskRequest
+import id.my.hendisantika.taskmanagement.dtos.TaskStatusRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -100,5 +101,24 @@ class TaskHandler(
         } catch (ex: NoSuchElementException) {
             taskRespNotFound(id).awaitSingle()
         }
+    }
+
+    suspend fun updateStatus(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+
+        return request.bodyToMono<TaskStatusRequest>().flatMap { body ->
+            val violations = validator.validate(body)
+            if (violations.isEmpty()) {
+                service.byId(id).flatMap { existingTask ->
+                    // val taskToUpdate = service.copyToUpdate(existingTask)(body)
+                    val taskToUpdate = existingTask.copy(status = body.status, updatedBy = body.userId)
+                    val taskResponse = service.update(id)(taskToUpdate).map(Task::toTaskResponse)
+                    ServerResponse.ok().body(taskResponse)
+                }.switchIfEmpty { taskRespNotFound(id) }
+            } else {
+                val badRequestResp = BadRequestResponse(entryMapErrors(violations))
+                ServerResponse.badRequest().bodyValue(badRequestResp)
+            }
+        }.awaitSingle()
     }
 }
