@@ -61,4 +61,15 @@ class UserHandler(private val service: UserService, private val validator: Valid
         return request.bodyToMono<UserPasswordRequest>()
             .flatMap(doChangePassword(id)).awaitSingle()
     }
+
+    suspend fun deleteById(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+
+        return service.deleteById(id)
+            .flatMap { ServerResponse.noContent().build() }
+            .switchIfEmpty {
+                log.info("User with ID {} does not exist", id)
+                ServerResponse.noContent().build()
+            }.awaitSingle()
+    }
 }
