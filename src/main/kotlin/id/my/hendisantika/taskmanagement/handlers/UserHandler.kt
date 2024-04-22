@@ -1,6 +1,8 @@
 package id.my.hendisantika.taskmanagement.handlers
 
+import id.my.hendisantika.taskmanagement.entities.User
 import id.my.hendisantika.taskmanagement.services.UserService
+import id.my.hendisantika.taskmanagement.utils.responses.responseNotFound
 import jakarta.validation.Validator
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
@@ -19,4 +21,5 @@ import org.springframework.stereotype.Component
 class UserHandler(private val service: UserService, private val validator: Validator) {
     private val log = LogManager.getLogger(UserHandler::class.java)
 
+    private val userResponseNotFound = responseNotFound(User::class, UserHandler::class)
 }
