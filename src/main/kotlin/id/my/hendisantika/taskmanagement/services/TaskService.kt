@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.LocalDate
 
 /**
  * Created by IntelliJ IDEA.
@@ -72,4 +73,5 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
 
     private fun firstItemLong(): List<Long> = listOf(-1)
     private val defaultFirstLong = defaultFirstItem(::firstItemLong)
+    private fun firstItemLocalDate(): List<LocalDate> = listOf(LocalDate.now())
 }
