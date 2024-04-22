@@ -1,6 +1,7 @@
 package id.my.hendisantika.taskmanagement.handlers
 
 import id.my.hendisantika.taskmanagement.dtos.CreateUserRequest
+import id.my.hendisantika.taskmanagement.dtos.UpdateUserRequest
 import id.my.hendisantika.taskmanagement.entities.User
 import id.my.hendisantika.taskmanagement.services.UserService
 import id.my.hendisantika.taskmanagement.utils.requests.getPathId
@@ -46,4 +47,11 @@ class UserHandler(private val service: UserService, private val validator: Valid
         return request.bodyToMono(CreateUserRequest::class.java)
             .flatMap(::doCreate).awaitSingle()
     }
+
+    suspend fun update(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+        return request.bodyToMono<UpdateUserRequest>()
+            .flatMap(doUpdate(id)).awaitSingle()
+    }
+
 }
