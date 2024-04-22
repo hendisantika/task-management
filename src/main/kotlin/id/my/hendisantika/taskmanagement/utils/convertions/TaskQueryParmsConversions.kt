@@ -1,5 +1,6 @@
 package id.my.hendisantika.taskmanagement.utils.convertions
 
+import id.my.hendisantika.taskmanagement.entities.TaskStatus
 import java.time.LocalDate
 
 /**
@@ -34,3 +35,8 @@ fun String.toLocalDate(/*dateStr: String*/): LocalDate {
 fun toLocalDates(paramValues: List<String>): List<LocalDate>? {
     return paramValues.stream().filter(String::isNotBlank).map(String::toLocalDate).toList().ifEmpty { null }
 }
+
+fun toStatuses(paramValues: List<String>): List<TaskStatus>? {
+    return paramValues.stream().map { enumValueOf<TaskStatus>(it) }.toList().ifEmpty { null }
+}
+
