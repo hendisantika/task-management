@@ -121,4 +121,16 @@ class TaskHandler(
             }
         }.awaitSingle()
     }
+
+    suspend fun deleteById(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+        val noContentResponse = ServerResponse.noContent().build()
+
+        return service.deleteById(id).flatMap {
+            noContentResponse
+        }.switchIfEmpty {
+            log.info("Task with ID {} does not exist", id)
+            noContentResponse
+        }.awaitSingle()
+    }
 }
