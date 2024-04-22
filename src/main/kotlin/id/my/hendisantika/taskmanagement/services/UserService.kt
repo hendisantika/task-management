@@ -24,4 +24,7 @@ class UserService(private val repository: UserRepository) : BaseService<User, Lo
     override fun all(): Flux<User> = repository.findAll()
 
     override fun byId(id: Long): Mono<User> = repository.findById(id)
+
+    override fun create(user: User): Mono<User> = repository.save(user)
+
 }
