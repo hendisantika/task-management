@@ -40,3 +40,8 @@ fun toStatuses(paramValues: List<String>): List<TaskStatus>? {
     return paramValues.stream().map { enumValueOf<TaskStatus>(it) }.toList().ifEmpty { null }
 }
 
+fun toLongs(paramValues: List<String>): List<Long>? {
+    // return if (paramValues?.isNotEmpty()!!) paramValues.stream().map(String::toLong).toList() else null
+    return paramValues.stream().map(String::toLong).toList().ifEmpty { null }
+}
+
