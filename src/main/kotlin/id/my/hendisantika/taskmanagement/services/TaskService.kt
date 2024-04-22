@@ -5,6 +5,7 @@ import id.my.hendisantika.taskmanagement.repositories.TaskRepository
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,4 +23,6 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
 
     override fun all(): Flux<Task> = repository.findAll()
     /*.delayElements(Duration.ofMillis(300))*/
+
+    override fun byId(id: Long): Mono<Task> = repository.findById(id)
 }
