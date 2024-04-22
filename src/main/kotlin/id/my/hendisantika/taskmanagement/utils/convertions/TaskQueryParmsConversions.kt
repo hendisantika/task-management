@@ -30,3 +30,7 @@ fun String.toLocalDate(/*dateStr: String*/): LocalDate {
         throw IllegalArgumentException("[«field»] format should be [«date_pattern»]")
     }
 }
+
+fun toLocalDates(paramValues: List<String>): List<LocalDate>? {
+    return paramValues.stream().filter(String::isNotBlank).map(String::toLocalDate).toList().ifEmpty { null }
+}
