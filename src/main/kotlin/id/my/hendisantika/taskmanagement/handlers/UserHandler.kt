@@ -2,6 +2,7 @@ package id.my.hendisantika.taskmanagement.handlers
 
 import id.my.hendisantika.taskmanagement.dtos.CreateUserRequest
 import id.my.hendisantika.taskmanagement.dtos.UpdateUserRequest
+import id.my.hendisantika.taskmanagement.dtos.UserPasswordRequest
 import id.my.hendisantika.taskmanagement.entities.User
 import id.my.hendisantika.taskmanagement.services.UserService
 import id.my.hendisantika.taskmanagement.utils.requests.getPathId
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyAndAwait
+import org.springframework.web.reactive.function.server.bodyToMono
 import reactor.kotlin.core.publisher.switchIfEmpty
 
 /**
@@ -54,4 +56,9 @@ class UserHandler(private val service: UserService, private val validator: Valid
             .flatMap(doUpdate(id)).awaitSingle()
     }
 
+    suspend fun changePassword(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+        return request.bodyToMono<UserPasswordRequest>()
+            .flatMap(doChangePassword(id)).awaitSingle()
+    }
 }
