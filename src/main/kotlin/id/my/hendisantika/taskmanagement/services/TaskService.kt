@@ -53,4 +53,16 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
             statusesIsNull = statuses.isNullOrEmpty(),
         )
     }
+
+    val copyToUpdate: (Task) -> (Task) -> Task = { existingTask ->
+        { task ->
+            task.copy(
+                id = existingTask.id,
+                version = existingTask.version,
+                createdAt = existingTask.createdAt,
+                updatedAt = existingTask.updatedAt,
+                createdBy = existingTask.createdBy
+            )
+        }
+    }
 }
