@@ -4,6 +4,7 @@ import id.my.hendisantika.taskmanagement.entities.User
 import id.my.hendisantika.taskmanagement.repositories.UserRepository
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,4 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(private val repository: UserRepository) : BaseService<User, Long> {
     private val log = LogManager.getLogger(UserService::class)
+
+    override fun all(): Flux<User> = repository.findAll()
+
 }
