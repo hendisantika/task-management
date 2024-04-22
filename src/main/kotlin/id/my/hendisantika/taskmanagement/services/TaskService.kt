@@ -70,4 +70,5 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
         list.orEmpty().ifEmpty(default)
     }
 
+    private fun firstItemLong(): List<Long> = listOf(-1)
 }
