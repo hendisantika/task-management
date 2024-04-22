@@ -16,3 +16,6 @@ fun <T> joinToJsonError(violations: Set<ConstraintViolation<T>>): String =
     "{ ${
         violations.joinToString(", ", transform = keyValEachViolation)
     } }"
+
+fun <T : Any> entryMapErrors(violations: Set<ConstraintViolation<T>>): Map<String, String> =
+    violations.associateBy(getViolationProperty, getViolationMessage)
