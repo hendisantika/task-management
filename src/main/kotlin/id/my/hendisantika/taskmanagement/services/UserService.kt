@@ -45,4 +45,16 @@ class UserService(private val repository: UserRepository) : BaseService<User, Lo
     }
 
     fun existsById(id: Long) = repository.existsById(id)
+
+    val copy: (User) -> (User) -> User = { existingUser ->
+        { user ->
+            user.copy(
+                id = existingUser.id,
+                version = existingUser.version,
+                createdAt = existingUser.createdAt,
+                updatedAt = existingUser.updatedAt,
+                password = existingUser.password
+            )
+        }
+    }
 }
