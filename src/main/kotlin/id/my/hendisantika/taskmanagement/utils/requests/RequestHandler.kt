@@ -1,6 +1,7 @@
 package id.my.hendisantika.taskmanagement.utils.requests
 
 import org.springframework.web.reactive.function.server.ServerRequest
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,3 +14,11 @@ import org.springframework.web.reactive.function.server.ServerRequest
  * To change this template use File | Settings | File Templates.
  */
 fun getPathId(request: ServerRequest): Long = request.pathVariable("id").toLong()
+
+private typealias QueryParam = String
+
+fun getQueryParam(request: ServerRequest): (QueryParam) -> String? {
+    return { param ->
+        request.queryParam(param).getOrNull()
+    }
+}
