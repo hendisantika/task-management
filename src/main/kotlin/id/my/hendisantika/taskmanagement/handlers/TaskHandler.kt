@@ -3,6 +3,7 @@ package id.my.hendisantika.taskmanagement.handlers
 import id.my.hendisantika.taskmanagement.dtos.TaskQueryParamValues
 import id.my.hendisantika.taskmanagement.dtos.TaskRequest
 import id.my.hendisantika.taskmanagement.dtos.TaskStatusRequest
+import id.my.hendisantika.taskmanagement.entities.Task
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -135,4 +136,5 @@ class TaskHandler(
     }
 
     private fun bodyToTask(body: TaskRequest) = Task.fromTaskRequest(body)
+    private fun createTaskAndMapResp(task: Task) = service.create(task).map(Task::toTaskResponse)
 }
