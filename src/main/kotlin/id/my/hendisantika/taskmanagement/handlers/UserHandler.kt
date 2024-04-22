@@ -6,16 +6,21 @@ import id.my.hendisantika.taskmanagement.dtos.UserPasswordRequest
 import id.my.hendisantika.taskmanagement.entities.User
 import id.my.hendisantika.taskmanagement.services.UserService
 import id.my.hendisantika.taskmanagement.utils.requests.getPathId
+import id.my.hendisantika.taskmanagement.utils.responses.BadRequestResponse
 import id.my.hendisantika.taskmanagement.utils.responses.responseNotFound
+import id.my.hendisantika.taskmanagement.utils.then
+import id.my.hendisantika.taskmanagement.utils.validations.entryMapErrors
 import jakarta.validation.Validator
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.apache.logging.log4j.LogManager
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyAndAwait
 import org.springframework.web.reactive.function.server.bodyToMono
+import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
 
 /**
@@ -72,4 +77,19 @@ class UserHandler(private val service: UserService, private val validator: Valid
                 ServerResponse.noContent().build()
             }.awaitSingle()
     }
+
+    private fun doCreate(body: CreateUserRequest): Mono<ServerResponse> {
+        val violations = validator.validate(body)
+
+        return if (violations.isEmpty()) {
+            fun bodyToUser(body: CreateUserRequest) = User.fromCreateUserRequest(body)
+            fun createUserAndMapResp(user: User) = service.create(user).map(User::toUserResponse)
+            val createUserResponse = ::bodyToUser then ::createUserAndMapResp
+            ServerResponse.status(HttpStatus.CREATED).body(createUserResponse(body))
+        } else {
+            val badRequestResp = BadRequestResponse(entryMapErrors(violations))
+            ServerResponse.badRequest().bodyValue(badRequestResp)
+        }
+    }
+
 }
