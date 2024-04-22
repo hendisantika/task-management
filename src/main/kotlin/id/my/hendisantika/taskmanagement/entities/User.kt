@@ -1,5 +1,6 @@
 package id.my.hendisantika.taskmanagement.entities
 
+import id.my.hendisantika.taskmanagement.dtos.CreateUserRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -38,4 +39,13 @@ data class User(
     /** Start with version 0 when created */
     @Version
     override val version: Int? = null,
-) : BaseEntity(id)
+) : BaseEntity(id) {
+    companion object {
+        fun fromCreateUserRequest(body: CreateUserRequest): User = User(
+            email = body.email,
+            password = body.password,
+            firstName = body.firstName,
+            lastName = body.lastName,
+        )
+
+    }
