@@ -19,3 +19,10 @@ data class TaskQueryParams(
     val updatedBy: Long? = null
 )
 
+data class TaskQueryParamValues(
+    val dueDates: List<LocalDate>?,
+    val statuses: List<TaskStatus>?,
+    val createdByUsers: List<Long>?,
+    val updatedByUsers: List<Long>?,
+)
+
