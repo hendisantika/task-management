@@ -149,4 +149,12 @@ class TaskHandler(
             ServerResponse.badRequest().bodyValue(badRequestResp)
         }
     }
+
+    private fun userIdDoesNotExists(userId: Long): () -> Mono<ServerResponse> = {
+        val errorMessage = "User with ID [{}] does not exist"
+        // val badRequestResp = BadRequestResponse(mapOf(Pair("userId", errorMessage)))
+        val badRequestResp = BadRequestResponse(mapOf("userId" to errorMessage.replace("{}", userId.toString())))
+        log.error(errorMessage, userId)
+        ServerResponse.badRequest().bodyValue(badRequestResp)
+    }
 }
