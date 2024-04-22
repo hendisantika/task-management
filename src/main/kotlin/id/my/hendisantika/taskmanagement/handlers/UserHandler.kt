@@ -92,4 +92,22 @@ class UserHandler(private val service: UserService, private val validator: Valid
         }
     }
 
+    private fun doUpdate(id: Long) = { body: UpdateUserRequest ->
+        val violations = validator.validate(body)
+        if (violations.isEmpty()) {
+            fun bodyToUser(body: UpdateUserRequest) = User.fromUpdateUserRequest(body)
+            fun updateUserAndMapResp(id: Long) = { user: User ->
+                service.update(id)(user)
+                    .map(User::toUserResponse)
+            }
+
+            val updateUserResponse = ::bodyToUser then updateUserAndMapResp(id)
+            updateUserResponse(body)
+                .flatMap(ServerResponse.ok()::bodyValue)
+                .switchIfEmpty { userResponseNotFound(id) }
+        } else {
+            val badRequestResp = BadRequestResponse(entryMapErrors(violations))
+            ServerResponse.badRequest().bodyValue(badRequestResp)
+        }
+    }
 }
