@@ -24,3 +24,13 @@ data class TaskResponse(
     val createdAt: Instant,
     val updatedAt: Instant,
 )
+
+data class CreateTaskResponse(
+    val id: Long,
+    val title: String,
+    val description: String?,
+    val dueDate: LocalDate,
+    val status: TaskStatus,
+    val createdBy: String,
+    val updatedBy: String,
+)
