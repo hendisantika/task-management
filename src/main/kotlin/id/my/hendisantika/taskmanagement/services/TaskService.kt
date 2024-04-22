@@ -65,4 +65,9 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
             )
         }
     }
+
+    private fun <T> defaultFirstItem(default: () -> List<T>): (List<T>?) -> List<T> = { list ->
+        list.orEmpty().ifEmpty(default)
+    }
+
 }
