@@ -1,6 +1,8 @@
 package id.my.hendisantika.taskmanagement.dtos
 
 import jakarta.validation.constraints.FutureOrPresent
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import java.time.LocalDate
 
@@ -28,6 +30,14 @@ data class TaskRequest(
     // TODO: Use enum as a type
     // @Column(converter = TaskStatusConverter::class.java)
     // val status: TaskStatus,
+    @field:NotNull(message = "status must not be empty")
+    val status: TaskStatus,
+
+    @field:NotNull(message = "userId must not be empty")
+    val userId: Long,
+)
+
+data class TaskStatusRequest(
     @field:NotNull(message = "status must not be empty")
     val status: TaskStatus,
 
