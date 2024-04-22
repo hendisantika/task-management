@@ -72,4 +72,33 @@ class TaskHandler(
         // }.awaitSingle()
     }
 
+    suspend fun update(request: ServerRequest): ServerResponse {
+        val id = getPathId(request)
+
+        // TODO: refactor ExistingTask not found by switchIfEmpty
+        return try {
+            val existingTask = service.byId(id).awaitSingle()
+            val updatedTaskMono = request.bodyToMono<TaskRequest>().flatMap { body ->
+                val violations = validator.validate(body)
+
+                if (violations.isEmpty()) {
+                    userService.byId(body.userId)
+                        .flatMap { _ ->
+                            val taskFromBody = Task.fromTaskRequest(body)
+                            val taskToUpdate = service.copyToUpdate(existingTask)(taskFromBody)
+                            ServerResponse.ok().body(service.update(id)(taskToUpdate).map(Task::toTaskResponse))
+                        }
+                        .switchIfEmpty(userIdDoesNotExists(body.userId))
+                } else {
+//          val badRequestResp = entryMapErrors(violations).toMono().map { BadRequestResponse(it) }
+                    val errorResponse = BadRequestResponse(entryMapErrors(violations))
+                    ServerResponse.badRequest().bodyValue(errorResponse)
+                }
+            }
+
+            updatedTaskMono.awaitSingle()
+        } catch (ex: NoSuchElementException) {
+            taskRespNotFound(id).awaitSingle()
+        }
+    }
 }
