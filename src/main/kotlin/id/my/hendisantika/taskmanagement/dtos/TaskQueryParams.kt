@@ -1,5 +1,6 @@
 package id.my.hendisantika.taskmanagement.dtos
 
+import id.my.hendisantika.taskmanagement.entities.TaskStatus
 import java.time.LocalDate
 
 /**

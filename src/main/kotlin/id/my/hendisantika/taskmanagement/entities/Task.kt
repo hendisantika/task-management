@@ -93,8 +93,6 @@ data class Task(
         )
     }
 
-}
-
 fun toTaskWithUserResponse(userResp: UserResponse): TaskWithOwnerResponse =
     TaskWithOwnerResponse(
         id = id!!,
@@ -105,4 +103,11 @@ fun toTaskWithUserResponse(userResp: UserResponse): TaskWithOwnerResponse =
         owner = userResp,
         updater = userResp,
     )
+
+}
+
+enum class TaskStatus {
+    PENDING,
+    IN_PROGRESS,
+    COMPLETED
 }
