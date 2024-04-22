@@ -1,5 +1,6 @@
 package id.my.hendisantika.taskmanagement.handlers
 
+import id.my.hendisantika.taskmanagement.dtos.CreateUserRequest
 import id.my.hendisantika.taskmanagement.entities.User
 import id.my.hendisantika.taskmanagement.services.UserService
 import id.my.hendisantika.taskmanagement.utils.requests.getPathId
@@ -41,4 +42,8 @@ class UserHandler(private val service: UserService, private val validator: Valid
             .switchIfEmpty { userResponseNotFound(id) }.awaitSingle()
     }
 
+    suspend fun create(request: ServerRequest): ServerResponse {
+        return request.bodyToMono(CreateUserRequest::class.java)
+            .flatMap(::doCreate).awaitSingle()
+    }
 }
