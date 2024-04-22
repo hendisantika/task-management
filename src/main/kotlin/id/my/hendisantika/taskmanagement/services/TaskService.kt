@@ -25,4 +25,9 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
     /*.delayElements(Duration.ofMillis(300))*/
 
     override fun byId(id: Long): Mono<Task> = repository.findById(id)
+
+    override fun create(task: Task): Mono<Task> {
+        return repository.save(task)
+    }
+
 }
