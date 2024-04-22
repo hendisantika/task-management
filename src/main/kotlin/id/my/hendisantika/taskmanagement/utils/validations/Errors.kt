@@ -19,3 +19,7 @@ fun <T> joinToJsonError(violations: Set<ConstraintViolation<T>>): String =
 
 fun <T : Any> entryMapErrors(violations: Set<ConstraintViolation<T>>): Map<String, String> =
     violations.associateBy(getViolationProperty, getViolationMessage)
+
+private val keyValEachViolation: (ConstraintViolation<*>) -> String = { violation ->
+    "\"${violation.propertyPath}\": \"${violation.message}\""
+}
