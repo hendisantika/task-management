@@ -5,6 +5,7 @@ import id.my.hendisantika.taskmanagement.repositories.UserRepository
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,4 +23,5 @@ class UserService(private val repository: UserRepository) : BaseService<User, Lo
 
     override fun all(): Flux<User> = repository.findAll()
 
+    override fun byId(id: Long): Mono<User> = repository.findById(id)
 }
