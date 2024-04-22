@@ -34,3 +34,13 @@ data class CreateTaskResponse(
     val createdBy: String,
     val updatedBy: String,
 )
+
+data class TaskWithOwnerResponse(
+    val id: Long,
+    val title: String,
+    val description: String?,
+    val dueDate: LocalDate,
+    val status: TaskStatus,
+    val owner: UserResponse,
+    val updater: UserResponse?,
+)
