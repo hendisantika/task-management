@@ -1,5 +1,6 @@
 package id.my.hendisantika.taskmanagement.services
 
+import id.my.hendisantika.taskmanagement.dtos.TaskQueryParamValues
 import id.my.hendisantika.taskmanagement.entities.Task
 import id.my.hendisantika.taskmanagement.repositories.TaskRepository
 import org.apache.logging.log4j.LogManager
@@ -36,5 +37,20 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
 
     override fun deleteById(id: Long): Mono<Void> {
         return repository.deleteById(id)
+    }
+
+    fun allByQueryParams(queryParams: TaskQueryParamValues): Flux<Task> {
+        val (dueDates, statuses, createdBy, updatedBy) = queryParams
+
+        return repository.findAllByConditions(
+            defaultFirstLong(createdBy),
+            defaultFirstLong(updatedBy),
+            defaultFirstItem(::firstItemLocalDate)(dueDates),
+            defaultFirstItem(::firstItemStatus)(statuses),
+            createdByIsNull = createdBy.isNullOrEmpty(),
+            updatedByIsNull = updatedBy.isNullOrEmpty(),
+            dueDatesIsNull = dueDates.isNullOrEmpty(),
+            statusesIsNull = statuses.isNullOrEmpty(),
+        )
     }
 }
