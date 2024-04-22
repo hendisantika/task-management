@@ -2,6 +2,7 @@ package id.my.hendisantika.taskmanagement.services
 
 import id.my.hendisantika.taskmanagement.dtos.TaskQueryParamValues
 import id.my.hendisantika.taskmanagement.entities.Task
+import id.my.hendisantika.taskmanagement.entities.TaskStatus
 import id.my.hendisantika.taskmanagement.repositories.TaskRepository
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
@@ -74,4 +75,5 @@ class TaskService(private val repository: TaskRepository) : BaseService<Task, Lo
     private fun firstItemLong(): List<Long> = listOf(-1)
     private val defaultFirstLong = defaultFirstItem(::firstItemLong)
     private fun firstItemLocalDate(): List<LocalDate> = listOf(LocalDate.now())
+    private fun firstItemStatus(): List<TaskStatus> = listOf(TaskStatus.PENDING)
 }
