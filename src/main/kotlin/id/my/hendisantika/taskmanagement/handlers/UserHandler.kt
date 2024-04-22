@@ -16,10 +16,7 @@ import kotlinx.coroutines.reactive.awaitSingle
 import org.apache.logging.log4j.LogManager
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.bodyAndAwait
-import org.springframework.web.reactive.function.server.bodyToMono
+import org.springframework.web.reactive.function.server.*
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
 
@@ -105,6 +102,22 @@ class UserHandler(private val service: UserService, private val validator: Valid
             updateUserResponse(body)
                 .flatMap(ServerResponse.ok()::bodyValue)
                 .switchIfEmpty { userResponseNotFound(id) }
+        } else {
+            val badRequestResp = BadRequestResponse(entryMapErrors(violations))
+            ServerResponse.badRequest().bodyValue(badRequestResp)
+        }
+    }
+
+    private fun doChangePassword(id: Long): (UserPasswordRequest) -> Mono<ServerResponse> = { body ->
+        val violations = validator.validate(body)
+        if (violations.isEmpty()) {
+            fun bodyToUser(body: UserPasswordRequest) = User.fromChangePasswordRequest(body)
+            fun updateUser(id: Long) = { user: User -> service.changePassword(id)(user) }
+
+            val changePasswordResp = ::bodyToUser then updateUser(id)
+            changePasswordResp(body)
+                .flatMap { ServerResponse.ok().bodyValue("Changed Password Successfully") }
+                .switchIfEmpty(userResponseNotFound(id))
         } else {
             val badRequestResp = BadRequestResponse(entryMapErrors(violations))
             ServerResponse.badRequest().bodyValue(badRequestResp)
