@@ -1,9 +1,6 @@
 package id.my.hendisantika.taskmanagement.entities
 
-import id.my.hendisantika.taskmanagement.dtos.CreateTaskResponse
-import id.my.hendisantika.taskmanagement.dtos.TaskRequest
-import id.my.hendisantika.taskmanagement.dtos.TaskResponse
-import id.my.hendisantika.taskmanagement.dtos.UserResponse
+import id.my.hendisantika.taskmanagement.dtos.*
 import org.springframework.data.annotation.*
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
@@ -95,4 +92,17 @@ data class Task(
             updatedBy = getFullName(updater),
         )
     }
+
+}
+
+fun toTaskWithUserResponse(userResp: UserResponse): TaskWithOwnerResponse =
+    TaskWithOwnerResponse(
+        id = id!!,
+        title = title,
+        description = description!!,
+        dueDate = dueDate,
+        status = status,
+        owner = userResp,
+        updater = userResp,
+    )
 }
