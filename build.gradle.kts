@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.spring") version "2.1.0"
     id("org.graalvm.buildtools.native") version "0.10.4"
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
 }
 
 group = "id.my.hendisantika"
